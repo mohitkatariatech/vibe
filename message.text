@@ -1,0 +1,505 @@
+import React, { useState } from "react";
+import logo from "../assets/logo3.png";
+import { IoIosEye, IoIosEyeOff } from "react-icons/io";
+import { FiUser, FiMail, FiLock } from "react-icons/fi";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { ClipLoader } from "react-spinners";
+
+const LoginRegister = () => {
+  const [active, setActive] = useState(false);
+
+  // Login states
+  const [loginUser, setLoginUser] = useState("");
+  const [loginPassword, setLoginPassword] = useState("");
+  const [showLoginPassword, setShowLoginPassword] = useState(false);
+
+  // Signup states
+  const [name, setName] = useState("");
+  const [userName, setUserName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [showSignupPassword, setShowSignupPassword] = useState(false);
+
+  const [loading, setLoading] = useState(false);
+
+  // SIGNUP FUNCTION
+  const handleSignup = async () => {
+    setLoading(true);
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/auth/signup`,
+        { name, userName, email, password },
+        { withCredentials: true }
+      );
+      console.log(result.data);
+    } catch (error) {
+      console.log("Signup error:", error);
+    }
+    setLoading(false);
+  };
+
+  return (
+    <div className="flex justify-center items-center min-h-screen bg-[#25252b] text-white font-[Poppins]">
+      <div
+        className={`relative w-[750px] h-[450px] border-2 border-[#e46033] shadow-[0_0_25px_#e46033] overflow-hidden transition-all duration-700`}
+      >
+        {/* BG SHAPES */}
+        <div
+          className={`absolute right-0 top-[-5px] h-[600px] w-[850px] bg-gradient-to-br from-[#25252b] to-[#e46033] origin-bottom-right transition-all duration-[1500ms] ${
+            active ? "rotate-0 skew-y-0" : "rotate-[10deg] skew-y-[40deg]"
+          }`}
+        ></div>
+
+        <div
+          className={`absolute left-[250px] top-full h-[700px] w-[850px] bg-[#25252b] border-t-[3px] border-[#e46033] origin-bottom-left transition-all duration-[1500ms] ${
+            active ? "-rotate-[11deg] -skew-y-[41deg]" : "rotate-0 skew-y-0"
+          }`}
+        ></div>
+
+        {/* ---------------- LOGIN FORM ---------------- */}
+        <div
+          className={`absolute top-0 left-0 h-full w-1/2 flex flex-col justify-center px-[40px] transition-all duration-700 ${
+            active
+              ? "-translate-x-[120%] opacity-0"
+              : "translate-x-0 opacity-100"
+          }`}
+        >
+          <div className="flex gap-2 justify-center items-center text-[20px] font-semibold mt-[40px]">
+            <span>Sign In to</span>
+            <img src={logo} alt="" className="w-[70px]" />
+          </div>
+
+          {/* Username */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type="text"
+              required
+              value={loginUser}
+              onChange={(e) => setLoginUser(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none text-[16px] font-semibold pr-8 transition duration-500 focus:border-[#e46033]"
+            />
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 text-[16px] transition peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Username
+            </label>
+            <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-[18px] text-gray-400" />
+          </div>
+
+          {/* Password */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type={showLoginPassword ? "text" : "password"}
+              required
+              value={loginPassword}
+              onChange={(e) => setLoginPassword(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none text-[16px] font-semibold pr-8 transition duration-500 focus:border-[#e46033]"
+            />
+
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 transition duration-500 peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Password
+            </label>
+
+            {showLoginPassword ? (
+              <IoIosEye
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-[20px] cursor-pointer text-gray-400"
+                onClick={() => setShowLoginPassword(false)}
+              />
+            ) : (
+              <IoIosEyeOff
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-[20px] cursor-pointer text-gray-400"
+                onClick={() => setShowLoginPassword(true)}
+              />
+            )}
+          </div>
+
+          <button className="relative w-full mt-7 h-[45px] rounded-[40px] border-2 border-[#e46033] font-semibold overflow-hidden z-[1]">
+            <span className="absolute inset-0 h-[300%] bg-gradient-to-b from-[#25252b] via-[#e46033] to-[#25252b] -top-full transition-all duration-500 hover:top-0"></span>
+            <span className="relative z-[2]">Login</span>
+          </button>
+
+          <p className="text-[14px] text-center mt-5">
+            Don’t have an account?
+            <br />
+            <button
+              onClick={() => setActive(true)}
+              className="text-[#e46033] font-semibold hover:underline"
+            >
+              Sign Up
+            </button>
+          </p>
+        </div>
+
+        {/* ---------------- LOGIN INFO TEXT ---------------- */}
+        <div
+          className={`absolute top-0 right-0 h-full w-1/2 flex flex-col justify-center text-right pr-[40px] pb-[60px] pl-[150px] transition-all duration-700 ${
+            active
+              ? "translate-x-[120%] opacity-0"
+              : "translate-x-0 opacity-100"
+          }`}
+        >
+          <h2 className="uppercase text-[36px] font-extrabold">
+            WELCOME BACK!
+          </h2>
+          <p className="text-[16px] mt-3">
+            We are happy to have you with us again.
+          </p>
+        </div>
+
+        {/* ---------------- REGISTER FORM ---------------- */}
+        <div
+          className={`absolute top-0 right-0 h-full w-1/2 flex flex-col justify-center px-[60px] transition-all duration-700 ${
+            active
+              ? "translate-x-0 opacity-100"
+              : "translate-x-[120%] opacity-0"
+          }`}
+        >
+          <div className="flex gap-2 justify-center items-center text-[20px] font-semibold mt-[40px]">
+            <span>Sign Up to</span>
+            <img src={logo} alt="" className="w-[70px]" />
+          </div>
+
+          {/* Name */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type="text"
+              required
+              value={name}
+              onChange={(e) => setName(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none text-[16px] pr-8 font-semibold focus:border-[#e46033]"
+            />
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 transition peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Name
+            </label>
+            <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Username */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type="text"
+              required
+              value={userName}
+              onChange={(e) => setUserName(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none pr-8 font-semibold focus:border-[#e46033]"
+            />
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 transition peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Username
+            </label>
+            <FiUser className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Email */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type="email"
+              required
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none pr-8 font-semibold focus:border-[#e46033]"
+            />
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 transition peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Email
+            </label>
+            <FiMail className="absolute right-0 top-1/2 -translate-y-1/2 text-gray-400" />
+          </div>
+
+          {/* Password */}
+          <div className="relative w-full h-[50px] mt-[25px]">
+            <input
+              type={showSignupPassword ? "text" : "password"}
+              required
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              className="peer w-full h-full bg-transparent border-b-2 border-white outline-none pr-8 font-semibold focus:border-[#e46033]"
+            />
+
+            <label className="absolute left-0 top-1/2 -translate-y-1/2 transition peer-focus:top-[-5px] peer-focus:text-[#e46033] peer-valid:top-[-5px] peer-valid:text-[#e46033]">
+              Password
+            </label>
+
+            {showSignupPassword ? (
+              <IoIosEye
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-[20px] cursor-pointer text-gray-400"
+                onClick={() => setShowSignupPassword(false)}
+              />
+            ) : (
+              <IoIosEyeOff
+                className="absolute right-0 top-1/2 -translate-y-1/2 text-[20px] cursor-pointer text-gray-400"
+                onClick={() => setShowSignupPassword(true)}
+              />
+            )}
+          </div>
+
+          <button
+            onClick={handleSignup}
+            disabled={loading}
+            className="relative w-full mt-7 h-[45px] rounded-[40px] border-2 border-[#e46033] font-semibold overflow-hidden flex justify-center items-center"
+          >
+            {loading ? (
+              <ClipLoader size={25} color="#e46033" />
+            ) : (
+              <>
+                <span className="absolute inset-0 h-[300%] bg-gradient-to-b from-[#25252b] via-[#e46033] to-[#25252b] -top-full transition-all duration-500 hover:top-0"></span>
+                <span className="relative z-[2]">Register</span>
+              </>
+            )}
+          </button>
+
+          <p className="text-[14px] text-center mt-3">
+            Already have an account?
+            <br />
+            <button
+              onClick={() => setActive(false)}
+              className="text-[#e46033] font-semibold hover:underline"
+            >
+              Sign In
+            </button>
+          </p>
+        </div>
+
+        {/* ---------------- REGISTER INFO ---------------- */}
+        <div
+          className={`absolute top-0 left-0 h-full w-1/2 flex flex-col justify-center text-left pl-[38px] pb-[60px] pr-[150px] pointer-events-none transition-all duration-700 ${
+            active
+              ? "translate-x-0 opacity-100"
+              : "-translate-x-[120%] opacity-0"
+          }`}
+        >
+          <h2 className="uppercase text-[36px]">WELCOME!</h2>
+          <p className="text-[16px] mt-3">
+            We’re delighted to have you here.
+          </p>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default LoginRegister;
+
+
+
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import Dp from "../assets/dp.png";
+import VideoPlayer from '../Components/VideoPlayer'
+import { useDispatch, useSelector } from 'react-redux';
+import { FaHeart, FaRegHeart } from "react-icons/fa";
+import { CgComment } from "react-icons/cg";
+import { IoBookmarkOutline, IoBookmark, IoSend } from "react-icons/io5";
+import axios from "axios";
+import { serverUrl } from "../App";
+import { setPostData } from "../redux/PostSlice";
+import { setUserdata } from "../redux/UserSlice";
+
+
+
+function Post({ post }) {
+  const navigate = useNavigate();
+  const { userData } = useSelector(state => state.user);
+  const { postData } = useSelector(state => state.post);
+  const [showComment, setShowComment] = useState(false);
+  const [message, setMessage] = useState("")
+
+  const dispatch = useDispatch();
+
+  const handleLike = async () => {
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/post/like/${post._id}`,
+        { withCredentials: true }
+      );
+
+      const updatedPost = result.data;
+      const updatedPosts = postData.map(p => p._id == post._id ? updatedPost : p)
+      dispatch(setPostData(updatedPosts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+
+  const handleComment = async () => {
+    try {
+      const result = await axios.post(
+        `${serverUrl}/api/post/comment/${post._id}`, { message },
+        { withCredentials: true }
+      );
+
+      const updatedPost = result.data;
+      const updatedPosts = postData.map(p => p._id == post._id ? updatedPost : p)
+      dispatch(setPostData(updatedPosts));
+    } catch (error) {
+      console.log(error);
+    }
+  };
+
+  const handleSaved = async()=>{
+    try {
+      const result = await axios.get(
+        `${serverUrl}/api/post/saved/${post._id}`, 
+        { withCredentials: true }
+      );
+      dispatch(setUserdata(result.data));
+    } catch (error) {
+      console.log(error.response);
+    }
+  }
+
+
+
+  return (
+    <div className="w-[95%] sm:w-[90%] min-h-[350px] sm:min-h-[450px] mx-auto flex flex-col gap-3 bg-white shadow-xl shadow-black/20 rounded-2xl">
+
+      {/* HEADER */}
+      <div className="w-full sm:h-[80px] flex items-center px-4">
+        <div className="flex items-center gap-4 w-full">
+          <div
+            className="w-[55px] h-[55px] sm:w-[70px] sm:h-[70px] border-2 border-black rounded-full overflow-hidden cursor-pointer"
+            onClick={() => navigate(`/profile/${post.author?.userName}`)}
+          >
+            <img
+              src={post.author?.profileImage || Dp}
+              alt="dp"
+              className="w-full h-full object-cover"
+            />
+          </div>
+
+          <p className="font-semibold truncate">
+            {post.author?.userName}
+          </p>
+        </div>
+
+        <button className="bg-black text-white px-4 py-1 rounded-full">
+          Follow
+        </button>
+      </div>
+
+      {/* MEDIA */}
+      <div className="w-full flex justify-center mt-6">
+        {post.media && post.mediaType === "image" && (
+          <img
+            src={post.media}
+            alt="preview"
+            className="w-full max-w-lg rounded-2xl object-contain"
+          />
+        )}
+
+        {post.media && post.mediaType === "video" && (
+          <VideoPlayer media={post.media} />
+        )}
+      </div>
+
+      {/* ACTIONS */}
+      <div className="flex justify-between px-6 mb-5 mt-3">
+        <div className="flex gap-5">
+
+          {/* LIKE */}
+          <div className="flex items-center gap-2">
+            {post.likes?.includes(userData?._id) ? (
+              <FaHeart
+                onClick={handleLike}
+                className="text-red-500 text-2xl cursor-pointer"
+              />
+            ) : (
+              <FaRegHeart
+                onClick={handleLike}
+                className="text-2xl cursor-pointer"
+              />
+            )}
+            <span>{post.likes?.length || 0}</span>
+          </div>
+
+          {/* COMMENT */}
+          <div className="flex items-center gap-2">
+            <CgComment className="text-2xl" onClick={()=>setShowComment(prev=>!prev)} />
+            <span>{post.comments?.length || 0}</span>
+          </div>
+        </div>
+
+        {/* SAVE */}
+        {userData.saved.includes(post._id) ? (
+          <IoBookmark 
+          onClick={handleSaved}
+          className="text-2xl cursor-pointer" />
+        ) : (
+          <IoBookmarkOutline 
+          onClick={handleSaved}
+          className="text-2xl cursor-pointer" />
+        )}
+      </div>
+
+      {/* CAPTION */}
+      {post.caption && (
+        <div className="px-6 flex gap-2">
+          <b>{post.author.userName}</b>
+          <span>{post.caption}</span>
+        </div>
+      )}
+
+      {/* COMMENT INPUT */}
+      {showComment && (
+  <div className="px-6 mb-4">
+
+    {/* INPUT ROW */}
+    <div className="flex items-center gap-3">
+      <img
+        src={post.author?.profileImage || Dp}
+        alt="dp"
+        className="w-[45px] h-[45px] rounded-full object-cover"
+      />
+
+      <input
+        type="text"
+        placeholder="Write comment..."
+        className="flex-1 border-b outline-none"
+        value={message}
+        onChange={(e) => setMessage(e.target.value)}
+      />
+
+      <IoSend
+        className="text-xl cursor-pointer"
+        onClick={handleComment}
+      />
+    </div>
+
+    {/* COMMENTS LIST (DOWNWARDS + RIGHT SIDE) */}
+    <div className="w-full max-h-[300px] overflow-auto mt-4 pl-[60px]">
+      {post.comments?.map((com, index) => (
+        <div key={index} className="flex items-start gap-3 mt-2">
+
+          <img
+            src={post.author?.profileImage || Dp}
+            alt="dp"
+            className="w-[35px] h-[35px] rounded-full object-cover cursor-pointer"
+            onClick={() =>
+              navigate(`/profile/${com.author?.userName}`)
+            }
+          />
+
+          <div className="bg-gray-100 px-3 py-2 rounded-xl max-w-[80%]">
+            <p className="text-xs font-semibold">
+              {com.author?.userName}
+            </p>
+            <p className="text-sm">
+              {com.message}
+            </p>
+          </div>
+
+        </div>
+      ))}
+    </div>
+
+  </div>
+)}
+
+    </div>
+  );
+}
+
+export default Post;
+
+
+
+
+
