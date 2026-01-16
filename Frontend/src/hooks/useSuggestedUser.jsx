@@ -11,7 +11,7 @@ function useSuggestedUser() {
     useEffect(() => {
         const fetchSuggestedUsers = async () => {
             try {
-                const res = await axios.get(`${serverUrl}/api/user/suggested`, { withCredentials: true });
+                const res = await axios.get(`${serverUrl}/api/user/suggested`,{ withCredentials: true });
                 console.log("Suggested API data:", res.data);
                 dispatch(setSuggestedUsers(res.data));
             } catch (error) {

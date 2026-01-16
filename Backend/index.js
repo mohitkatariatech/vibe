@@ -12,9 +12,14 @@ import messageRouter from "./routes/message.routes.js";
 import { app, server } from "./socket.js";
 dotenv.config()
 
-const port = process.env.PORT
+const port = process.env.PORT || 8000
 
-app.use(cors({ origin: "https://vibe-silk-one.vercel.app", credentials: true,  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"], }));
+app.use(cors({
+  origin: "https://vibe-silk-one.vercel.app",
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+  allowedHeaders: ["Content-Type", "Authorization"]
+}));
 
 
 app.use(express.json());
@@ -26,10 +31,6 @@ app.use("/api/post", postRouter)
 app.use("/api/loop", loopRouter)
 app.use("/api/story", storyRouter)
 app.use("/api/message", messageRouter)
-
-
-
-
 
 
 server.listen(port, () => {
