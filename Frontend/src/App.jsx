@@ -25,7 +25,7 @@ import Search from './pages/Search'
 import useAllNotifications from './hooks/useAllNotification'
 import Notifications from './pages/Notifications'
 import { setNotificationData } from './redux/UserSlice'
-export const serverUrl = "http://localhost:8000"
+export const serverUrl = "https://vibe-psr9.onrender.com"
 
 function App() {
 
