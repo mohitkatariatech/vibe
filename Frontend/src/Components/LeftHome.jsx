@@ -31,7 +31,16 @@ function LeftHome() {
 
 
   return (
-    <aside className="hidden lg:flex w-[240px] xl:w-[400px] h-screen bg-black border-r border-gray-800  flex-col">
+   <aside className="
+  hidden lg:flex
+  w-[280px] xl:w-[320px]
+  h-[100dvh]
+  bg-black
+  border-r border-gray-800
+  flex-col
+  sticky top-0
+">
+
 
       {/* LOGO */}
       <div className="h-[64px] px-4 flex items-center justify-between">
@@ -76,7 +85,7 @@ function LeftHome() {
         </span>
       </div>
 
-      <div className="flex-1 px-4 pt-4 overflow-y-auto no-scrollbar">
+<div className="flex-1 px-4 pt-4 overflow-y-auto scrollbar-thin scrollbar-thumb-gray-700">
         <p className="text-gray-400 text-[12.5px] mb-3">
           Suggested for you
         </p>
@@ -93,7 +102,12 @@ function LeftHome() {
         </div>
       </div>
 </>}
-      {showNotification && <Notifications/>}
+     {showNotification && (
+  <div className="flex-1 overflow-y-auto">
+    <Notifications />
+  </div>
+)}
+
     
 
     </aside>
