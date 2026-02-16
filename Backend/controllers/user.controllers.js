@@ -39,9 +39,9 @@ export const suggestedUsers = async (req, res) => {
   }
 };
 
+
+
 export const editProfile = async (req, res) => {
-  console.log("REQ FILE:", req.file);
-console.log("REQ BODY:", req.body);
 
   try {
     const { name, userName, bio, profession, gender } = req.body;

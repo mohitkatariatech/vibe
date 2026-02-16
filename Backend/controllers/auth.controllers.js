@@ -174,6 +174,7 @@ export const resetPassword = async (req, res) => {
     user.password = hashedPassword;
     user.isOtpVerified = false;
 
+    
     await user.save();
 
     return res.status(200).json({ message: "Password reset successfully!" });
